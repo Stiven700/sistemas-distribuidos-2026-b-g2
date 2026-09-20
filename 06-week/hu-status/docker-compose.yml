@@ -1,0 +1,188 @@
+\
+# Base Docker Compose file — Property Booking Platform
+# Services and ports match 05-architecture/overview.md §4.
+# Databases match ADR-002 (Database per Service): one datastore per service,
+# no service ever connects to another service's datastore directly.
+#
+# This is a first draft (Week 6) to accompany 13-operations/environments.md.
+# No service code exists yet — each service's Dockerfile is expected at build time
+# once implementation starts. Override files (docker-compose.override.yml for
+# develop, compose.qa.yml, compose.prod.yml) are planned but not yet written —
+# see environments.md §2 for the per-environment config strategy.
+
+version: "3.9"
+
+networks:
+  appnet:
+    driver: bridge
+
+volumes:
+  booking-db-data: {}
+  payment-db-data: {}
+  identity-db-data: {}
+  catalog-db-data: {}
+
+services:
+  # ---------------------------------------------------------------------------
+  # API Gateway — single entry point, JWT validation, rate limiting
+  # (05-architecture/overview.md §6)
+  # ---------------------------------------------------------------------------
+  api-gateway:
+    build: ./api-gateway
+    networks: [appnet]
+    environment:
+      IDENTITY_SERVICE_URL: http://identity-service:3004
+      BOOKING_SERVICE_URL: http://booking-service:3001
+      CATALOG_SERVICE_URL: http://catalog-service:3002
+    ports: ["8080:8080"]
+    depends_on:
+      identity-service: { condition: service_started }
+      booking-service: { condition: service_started }
+      catalog-service: { condition: service_started }
+
+  # ---------------------------------------------------------------------------
+  # Booking Service (Core Domain) — Reserva lifecycle, Saga driver
+  # ---------------------------------------------------------------------------
+  booking-service:
+    build: ./booking-service
+    networks: [appnet]
+    environment:
+      DB_URL: postgres://booking-db:5432/booking_dev
+      BROKER_URL: amqp://broker:5672
+      LOG_LEVEL: debug
+    ports: ["3001:3001"]
+    depends_on:
+      booking-db: { condition: service_healthy }
+      broker: { condition: service_healthy }
+
+  booking-db:
+    image: postgres:16
+    networks: [appnet]
+    environment:
+      POSTGRES_DB: booking_dev
+      POSTGRES_PASSWORD: dev_only_not_for_qa_or_prod
+    volumes: ["booking-db-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Payment Service (Supporting) — idempotent charges, append-only ledger
+  # ---------------------------------------------------------------------------
+  payment-service:
+    build: ./payment-service
+    networks: [appnet]
+    environment:
+      DB_URL: postgres://payment-db:5432/payment_dev
+      BROKER_URL: amqp://broker:5672
+      PAYMENT_GATEWAY_URL: https://sandbox.example-gateway.test # placeholder — provider not yet chosen, see scope.md
+      LOG_LEVEL: debug
+    ports: ["3003:3003"]
+    depends_on:
+      payment-db: { condition: service_healthy }
+      broker: { condition: service_healthy }
+
+  payment-db:
+    image: postgres:16
+    networks: [appnet]
+    environment:
+      POSTGRES_DB: payment_dev
+      POSTGRES_PASSWORD: dev_only_not_for_qa_or_prod
+    volumes: ["payment-db-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Identity Service (Generic) — registration, login, JWT issuance
+  # ---------------------------------------------------------------------------
+  identity-service:
+    build: ./identity-service
+    networks: [appnet]
+    environment:
+      DB_URL: postgres://identity-db:5432/identity_dev
+      JWT_PUBLIC_KEY_PATH: /run/secrets/jwt_public_key # dev keypair, never committed
+      LOG_LEVEL: debug
+    ports: ["3004:3004"]
+    depends_on:
+      identity-db: { condition: service_healthy }
+
+  identity-db:
+    image: postgres:16
+    networks: [appnet]
+    environment:
+      POSTGRES_DB: identity_dev
+      POSTGRES_PASSWORD: dev_only_not_for_qa_or_prod
+    volumes: ["identity-db-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Catalog Service (Supporting) — property search, eventual consistency
+  # ---------------------------------------------------------------------------
+  catalog-service:
+    build: ./catalog-service
+    networks: [appnet]
+    environment:
+      DB_URL: mongodb://catalog-db:27017/catalog_dev
+      BROKER_URL: amqp://broker:5672
+      LOG_LEVEL: debug
+    ports: ["3002:3002"]
+    depends_on:
+      catalog-db: { condition: service_healthy }
+      broker: { condition: service_healthy }
+
+  catalog-db:
+    image: mongo:7
+    networks: [appnet]
+    volumes: ["catalog-db-data:/data/db"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Notification Service (Generic) — multi-channel messaging on booking outcomes
+  # ---------------------------------------------------------------------------
+  notification-service:
+    build: ./notification-service
+    networks: [appnet]
+    environment:
+      CACHE_URL: redis://notification-cache:6379
+      BROKER_URL: amqp://broker:5672
+      LOG_LEVEL: debug
+    ports: ["3005:3005"]
+    depends_on:
+      notification-cache: { condition: service_healthy }
+      broker: { condition: service_healthy }
+
+  notification-cache:
+    image: redis:7
+    networks: [appnet]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Message broker — provider still TBD between Kafka/RabbitMQ (see scope.md);
+  # RabbitMQ used here as the simplest single-container option for local dev.
+  # ---------------------------------------------------------------------------
+  broker:
+    image: rabbitmq:3-management
+    networks: [appnet]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports: ["15672:15672"] # management UI, dev-only
