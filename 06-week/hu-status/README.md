@@ -3,7 +3,7 @@
 # Weekly Status - Week 06
 
 FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: [tu usuario de GitHub]
+GITHUB_USER: Stiven700
 TEAM: Pms_Property
 SPRINT_GOAL: Define the environment and configuration strategy (develop/qa/prod) for
 the 5 microservices, and close a gap between the Definition of Done's expected branch
