@@ -1,13 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   07-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       07-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 07
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Formalize how services actually talk to each other — justify sync vs.
-async per interaction, publish the first real API contract, and define versioning/
-compatibility rules for both REST and event contracts.
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Formalize how services actually talk to each other — justify sync vs. async per interaction, publish the first real API contract, and define versioning/ compatibility rules for both REST and event contracts.
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 

@@ -1,12 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   02-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       02-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 02
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Define the team's agile working framework before starting domain and
-architecture work.
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Define the team's agile working framework before starting domain and architecture work.
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 

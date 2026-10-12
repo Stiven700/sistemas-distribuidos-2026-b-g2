@@ -1,13 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   05-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       05-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 05
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Close the remaining documentation gaps for MVP 1 — formalize architecture
-decisions as ADRs, complete the UX/UI documentation from the Figma mockup, and define
-the project's security and governance rules.
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Close the remaining documentation gaps for MVP 1 — formalize architecture decisions as ADRs, complete the UX/UI documentation from the Figma mockup, and define the project's security and governance rules.
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 

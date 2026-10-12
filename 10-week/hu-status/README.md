@@ -1,14 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   10-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       10-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 10
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Finish aligning the documentation (data models, API rules, requirements
-and user stories) and start the coding phase with the frontend — the Angular container,
-the Catalog and Booking portals — promoting each story from `develop` to `qa` and into
-the 2.0.0 release.
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Finish aligning the documentation (data models, API rules, requirements and user stories) and start the coding phase with the frontend — the Angular container, the Catalog and Booking portals — promoting each story from `develop` to `qa` and into the 2.0.0 release.
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 

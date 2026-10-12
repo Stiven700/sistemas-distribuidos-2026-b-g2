@@ -1,12 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   04-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       04-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 04
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Define the system's architecture (microservices, hexagonal structure,
-patterns) and lock down MVP 1 scope, building directly on the corrected domain model.
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Define the system's architecture (microservices, hexagonal structure, patterns) and lock down MVP 1 scope, building directly on the corrected domain model.
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 

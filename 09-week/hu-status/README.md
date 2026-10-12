@@ -1,14 +1,15 @@
-<!-- Your weekly grade is read AUTOMATICALLY from this file:
-   09-week/hu-status/README.md  (inside YOUR fork). English. -->
+<!-- HU-STATUS TEMPLATE - do NOT remove the <!-- ... --> markers or the table headers.
+     Your weekly grade is read AUTOMATICALLY from this file:
+       09-week/hu-status/README.md  (inside YOUR fork). English. -->
+
 # Weekly Status - Week 09
 
-FULL_NAME: Daniel Stiven Poveda
-GITHUB_USER: Stiven700
-TEAM: Pms_Property
-SPRINT_GOAL: Bring the documentation repository in line with the official course norm
-and its Annex J — first the API contract layer (guidelines, gap register, endpoint
-fiches), then the architecture decisions the norm forces the team to record as ADRs
-(single database per engine, message broker, reservation expiry in the worker).
+<!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Bring the documentation repository in line with the official course norm and its Annex J — first the API contract layer (guidelines, gap register, endpoint fiches), then the architecture decisions the norm forces the team to record as ADRs (single database per engine, message broker, reservation expiry in the worker).
+<!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 
