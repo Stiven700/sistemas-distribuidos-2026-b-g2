@@ -5,33 +5,44 @@
 # Weekly Status - Week 11
 
 <!-- CONFIG-START - must match your profile repo (username/username) CONFIG -->
-- FULL_NAME:
-- GITHUB_USER:
-- TEAM:
-- SPRINT_GOAL:
+- FULL_NAME: Daniel Stiven Poveda Cante
+- GITHUB_USER: Stiven700
+- TEAM: Pms_Property
+- SPRINT_GOAL: Make the Saga `reservar` observable end to end (trace map, log contract, instrumentation, metrics, SLOs and incident response) and start corte 3 replacing the mocks with the real services under the same contracts.
 <!-- CONFIG-END -->
 
 ## 1. User stories worked this week
 | HU ID | Title | Status (todo/doing/done) | Evidence (PR or commit URL) |
 |---|---|---|---|
-| HU-XXX-001 |  |  |  |
+| W11-CP1 | Trace map of the Saga `reservar` across gateway, workflow, booking, catalog, payment and RabbitMQ | done | https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/01-journey.md |
+| W11-CP2 | Structured JSON log contract with Saga domain fields and a never-log list | done | https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/02-log-contract.md |
+| W11-CP3 | Trace-context filter, JSON logger, propagation to booking-service and `/metrics` in `property-workflow` | done | https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/tree/main/11-week/workshop/03-instrumentation |
+| W11-CP4 | Golden signals and metric catalog per service | done | https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/04-metrics.md |
+| W11-CP6..CP9 | SLOs, burn-rate alerts, runbook and incident drill | todo | — |
 
 ## 2. My individual contribution
--
+- Mapped the critical journey (Saga `reservar`) hop by hop and how `traceparent` crosses the outbox into RabbitMQ.
+- Defined the log contract shared by the six services, with `saga_id`, `saga_step`, `reserva_id`, `pago_id` and `monto_cents`.
+- Wrote and tested a minimal instrumentation module for `property-workflow` in Java: the test proves the `trace_id` received is the one sent to `booking-service`.
+- Wrote the metric catalog with the four golden signals, label cardinality and histogram buckets.
 
 ## 3. Blockers and risks
--
+- The backend services are not built yet; the instrumentation is a standalone module until corte 3.
+- `booking.outbox_event` needs a `traceparent` column so the trace survives the async boundary; it is not in `06-data/models.md` yet.
 
 ## 4. Plan for next week
--
+- Delivery 2 of the workshop: SLOs, burn-rate alerts, runbook, incident drill and postmortem.
+- Corte 3: start the real services behind the same OpenAPI contracts.
 
 ## 5. Compliance self-check
-- [ ] Conventional Commits - `type(scope): summary`
-- [ ] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...)
-- [ ] Testable acceptance criteria
-- [ ] Tests added/updated (unit / integration)
-- [ ] DDD / hexagonal boundaries respected (domain has no I/O)
-- [ ] No secrets; config via environment variables
+- [x] Conventional Commits - `type(scope): summary` — *(e.g. `feat(w11): add trace-context middleware and structured logger`)*
+- [ ] Per-environment HU branch + PR to that environment (hu-xxx-dev -> develop, ...) — *(individual workshop in my fork)*
+- [x] Testable acceptance criteria — *(each checkpoint has its "done when" check)*
+- [x] Tests added/updated (unit / integration) — *(`TracePropagationTest`)*
+- [ ] DDD / hexagonal boundaries respected (domain has no I/O) — *(no domain code this week)*
+- [x] No secrets; config via environment variables — *(`SERVICE_NAME`, `APP_ENV`, `BOOKING_URL`; tokens are in the never-log list)*
 
 ## 6. Evidence links
--
+- Workshop: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/tree/main/11-week/workshop
+- Commits: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commits/main
+- property-docs: https://github.com/code-corhuila/property-docs
