@@ -5,7 +5,7 @@
 - GITHUB_USER: Stiven700
 - TEAM: Pms_Property
 - DOCS_REPO: https://github.com/code-corhuila/property-docs
-- REFLECTION_DOC: <PASTE-YOUR-GOOGLE-DOC-LINK>
+- REFLECTION_DOC:(https://docs.google.com/document/d/1ch7NWSLR9t78miCnoqP9AKGwoLx-gMpVqeuWlnD-ccc/edit?usp=sharing)
 - JOURNEY: Book a property — Saga `reservar` (POST /api/v1/sagas/reservar)
 <!-- CONFIG-END -->
 
