@@ -1,0 +1,89 @@
+# CP7 · Burn-rate alerts for the Saga `reservar` (property-workflow)
+# SLO 1 availability 99.5 % over 30 days -> error budget 0.005.
+# SLO 2 latency 95 % of Sagas <= 3 s -> error budget 0.05.
+# Check: promtool check rules 06-alerts.yml
+
+groups:
+  - name: saga-reservar-sli
+    rules:
+      - record: saga_reservar:error_ratio:rate5m
+        expr: |
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar",status_class="5xx"}[5m]))
+          /
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar"}[5m]))
+      - record: saga_reservar:error_ratio:rate30m
+        expr: |
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar",status_class="5xx"}[30m]))
+          /
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar"}[30m]))
+      - record: saga_reservar:error_ratio:rate1h
+        expr: |
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar",status_class="5xx"}[1h]))
+          /
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar"}[1h]))
+      - record: saga_reservar:error_ratio:rate6h
+        expr: |
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar",status_class="5xx"}[6h]))
+          /
+          sum(rate(gateway_requests_total{route="/api/v1/sagas/reservar"}[6h]))
+      - record: saga_reservar:slow_ratio:rate5m
+        expr: |
+          1 - sum(rate(saga_reservar_duration_seconds_bucket{le="3.0"}[5m]))
+          / sum(rate(saga_reservar_duration_seconds_count[5m]))
+      - record: saga_reservar:slow_ratio:rate30m
+        expr: |
+          1 - sum(rate(saga_reservar_duration_seconds_bucket{le="3.0"}[30m]))
+          / sum(rate(saga_reservar_duration_seconds_count[30m]))
+
+  - name: saga-reservar-slo-alerts
+    rules:
+      - alert: SagaReservarAvailabilityFastBurn
+        # 14.4 x 0.005 = 0.072 -> 7.2 % of requests failing; 2 % of the monthly budget in 1 h
+        expr: |
+          saga_reservar:error_ratio:rate1h > (14.4 * 0.005)
+          and
+          saga_reservar:error_ratio:rate5m > (14.4 * 0.005)
+        for: 2m
+        labels:
+          severity: page
+          team: pms-property
+          service: property-workflow
+          slo: availability
+        annotations:
+          summary: "Saga reservar is burning the availability budget 14.4x faster than allowed"
+          description: "{{ $value | humanizePercentage }} of POST /api/v1/sagas/reservar answered 5xx in the last hour (limit 7.2 %)."
+          runbook_url: "https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md"
+
+      - alert: SagaReservarAvailabilitySlowBurn
+        # 6 x 0.005 = 0.03 -> 3 % of requests failing; 5 % of the monthly budget in 6 h
+        expr: |
+          saga_reservar:error_ratio:rate6h > (6 * 0.005)
+          and
+          saga_reservar:error_ratio:rate30m > (6 * 0.005)
+        for: 5m
+        labels:
+          severity: ticket
+          team: pms-property
+          service: property-workflow
+          slo: availability
+        annotations:
+          summary: "Saga reservar is slowly burning the availability budget (6x)"
+          description: "{{ $value | humanizePercentage }} of Sagas answered 5xx over 6 hours (limit 3 %)."
+          runbook_url: "https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md"
+
+      - alert: SagaReservarLatencyBurn
+        # 4 x 0.05 = 0.20 -> more than 20 % of Sagas take longer than 3 s
+        expr: |
+          saga_reservar:slow_ratio:rate30m > (4 * 0.05)
+          and
+          saga_reservar:slow_ratio:rate5m > (4 * 0.05)
+        for: 0m
+        labels:
+          severity: ticket
+          team: pms-property
+          service: property-workflow
+          slo: latency
+        annotations:
+          summary: "More than 20 % of Sagas reservar take longer than 3 s"
+          description: "{{ $value | humanizePercentage }} of Sagas were slower than 3 s in the last 30 minutes."
+          runbook_url: "https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/11-week/workshop/07-runbook.md"
