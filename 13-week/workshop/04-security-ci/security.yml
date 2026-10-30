@@ -1,0 +1,65 @@
+# Proposal for the pipeline of code-corhuila/property-workflow (week 13, CP4).
+# It lives in my fork; it does not change the team repository today.
+name: workflow-security
+
+on:
+  pull_request:
+    branches: [develop, qa]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: code-corhuila/property-workflow
+          fetch-depth: 0
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: code-corhuila/property-workflow
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Dependency audit (OWASP dependency-check, fails on CVSS 7 or more)
+        run: mvn -B -DskipTests org.owasp:dependency-check-maven:check -DfailBuildOnCVSS=7
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+  authorization:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: code-corhuila/property-workflow
+      - uses: actions/checkout@v4
+        with:
+          path: proposal
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Add the negative authorization test
+        run: cp proposal/13-week/workshop/04-security-ci/SagaAuthorizationNegativeTest.java workflow-app/src/test/java/co/edu/corhuila/property/workflow/
+      - name: Negative authorization test
+        run: mvn -B -pl workflow-app -am -Dtest=SagaAuthorizationNegativeTest -Dsurefire.failIfNoSpecifiedTests=false verify
