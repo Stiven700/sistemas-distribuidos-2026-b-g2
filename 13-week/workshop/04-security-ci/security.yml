@@ -60,6 +60,6 @@ jobs:
           java-version: "21"
           cache: maven
       - name: Add the negative authorization test
-        run: cp proposal/13-week/workshop/04-security-ci/SagaAuthorizationNegativeTest.java workflow-app/src/test/java/co/edu/corhuila/property/workflow/
+        run: cp proposal/13-week/workshop/04-security-ci/SagaAuthorizationNegativeTest.java workflow-app/src/test/java/co/edu/corhuila/property/workflow/app/
       - name: Negative authorization test
         run: mvn -B -pl workflow-app -am -Dtest=SagaAuthorizationNegativeTest -Dsurefire.failIfNoSpecifiedTests=false verify

@@ -8,7 +8,7 @@ Endpoint: `POST /api/v1/sagas/reservar` (E-23).
 
 1. Clone `code-corhuila/property-workflow` (branch `develop`).
 2. Copy `SagaAuthorizationNegativeTest.java` to
-   `workflow-app/src/test/java/co/edu/corhuila/property/workflow/`.
+   `workflow-app/src/test/java/co/edu/corhuila/property/workflow/app/`.
 3. Run (Maven 3.9 and JDK 21, or Docker):
    ```bash
    mvn -B -pl workflow-app -am -Dtest=SagaAuthorizationNegativeTest -Dsurefire.failIfNoSpecifiedTests=false verify
@@ -17,4 +17,17 @@ Endpoint: `POST /api/v1/sagas/reservar` (E-23).
    envelope `{"error":"UNAUTHORIZED",...}`.
 
 `security.yml` runs the same test plus gitleaks and OWASP dependency-check on every pull
-request into `develop` and `qa`. The real console output is added in CP8.
+request into `develop` and `qa`.
+
+## Real output (CP8)
+
+```
+Test set: co.edu.corhuila.property.workflow.app.SagaAuthorizationNegativeTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.916 s -- in co.edu.corhuila.property.workflow.app.SagaAuthorizationNegativeTest
+```
+
+## security.yml validation
+
+```
+Checked as valid YAML; actionlint was not run because of time.
+```

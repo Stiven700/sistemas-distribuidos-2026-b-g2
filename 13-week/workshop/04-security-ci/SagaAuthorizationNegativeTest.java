@@ -1,4 +1,4 @@
-package co.edu.corhuila.property.workflow;
+package co.edu.corhuila.property.workflow.app;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +20,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 // Story: [security] Reject forged tokens at the workflow even inside the network (STRIDE S).
-@SpringBootTest(classes = WorkflowApplication.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class SagaAuthorizationNegativeTest {
 
