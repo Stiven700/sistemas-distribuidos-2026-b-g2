@@ -14,26 +14,23 @@
 ## 1. User stories worked this week
 | HU ID | Title | Status (todo/doing/done) | Evidence (PR or commit URL) |
 |---|---|---|---|
-| #165 | Threat model: api-gateway -> property-workflow | doing | https://github.com/code-corhuila/property-docs/pull/181 |
+| #165 | Threat model: api-gateway -> property-workflow | done | https://github.com/code-corhuila/property-docs/pull/181 |
 | #182 | [security] Only the owner or ADMIN can read a Saga | todo | https://github.com/code-corhuila/property-docs/issues/182 |
 | #183 | [security] Limit repeated Saga starts per user | todo | https://github.com/code-corhuila/property-docs/issues/183 |
-| #184 | [security] Reject forged tokens at the workflow even inside the network | doing | https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/342b921b02af90fd644f9087ee5210baadba93dc |
+| #184 | [security] Reject forged tokens at the workflow even inside the network | todo | https://github.com/code-corhuila/property-docs/issues/184 |
 
 ## 2. My individual contribution
-- Attack surface map of Property with the trust boundaries TB1 to TB4 and my boundary api-gateway -> property-workflow: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/3d92a8005ab68ed91bde212d854f5a424b4106a3
-- STRIDE analysis of POST /api/v1/sagas/reservar and GET /api/v1/sagas/{id}, with risk ranking and the library book: https://github.com/code-corhuila/property-docs/pull/181
+- Attack surface map of Property with its trust boundaries, and my boundary api-gateway -> property-workflow: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/blob/main/13-week/workshop/01-attack-surface.md
+- STRIDE analysis with risk ranking, residual risk and the library book [B], updated after the peer review: https://github.com/code-corhuila/property-docs/pull/181
 - Three security stories in the team backlog: #182, #183, #184
-- Security CI proposal (gitleaks, OWASP dependency-check, negative authorization test for property-workflow): https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/fe87c812dd084d0d0cb1a4f0b1e3aac31fd335c3
-- Review of the STRIDE of booking-api -> PostgreSQL: https://github.com/code-corhuila/property-docs/pull/173#issuecomment-6513866556
+- Security CI proposal (secret scan, dependency audit, negative test) with the real output of the test: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/tree/main/13-week/workshop/04-security-ci
 
 ## 3. Blockers and risks
-- The CI of the code-corhuila organization does not start (billing lock), so the security workflow is only a proposal in my fork.
-- The owner check of GET /api/v1/sagas/{id} does not exist yet: the endpoint comes in batch 2.
+- The CI of the code-corhuila organization does not start (billing lock), so the security workflow is a proposal in my fork, run by hand.
 
 ## 4. Plan for next week
-- Answer the review on my STRIDE pull request and finish the residual risk and the references (CP6).
-- Run the negative authorization test against property-workflow and record the output (CP8).
-- Batch 2 of the code: business endpoints of the workflow, including the owner check of #182.
+- Implement the highest-priority story of my boundary in batch 2 of the code.
+- Move the negative test of CP8 into the team repository with its pull request.
 
 ## 5. Compliance self-check
 - [x] Conventional Commits - `type(scope): summary`
@@ -46,7 +43,9 @@
 ## 6. Evidence links
 - Workshop folder: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/tree/main/13-week/workshop
 - Claim issue: https://github.com/code-corhuila/property-docs/issues/165
-- STRIDE pull request: https://github.com/code-corhuila/property-docs/pull/181
+- STRIDE pull request and its commits: https://github.com/code-corhuila/property-docs/pull/181/commits
 - Stories: https://github.com/code-corhuila/property-docs/issues/182, https://github.com/code-corhuila/property-docs/issues/183, https://github.com/code-corhuila/property-docs/issues/184
-- Review comment: https://github.com/code-corhuila/property-docs/pull/173#issuecomment-6513866556
-- Commits: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/c509faf0da95136384bac6decf61c41ddd673db7, https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/3d92a8005ab68ed91bde212d854f5a424b4106a3, https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/0b39c9248932a3fb2c29070d5d9ea2bc9452f8d2, https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/fe87c812dd084d0d0cb1a4f0b1e3aac31fd335c3, https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commit/342b921b02af90fd644f9087ee5210baadba93dc
+- Review comment I left: https://github.com/code-corhuila/property-docs/pull/173#issuecomment-6513866556
+- Review received and my answer: https://github.com/code-corhuila/property-docs/pull/181
+- Commits of the workshop in my fork: https://github.com/Stiven700/sistemas-distribuidos-2026-b-g2/commits/main/13-week
+- Reflection document: https://docs.google.com/document/d/1UE2GjGTImCn9her6tznxUrbO30XjONgURysbWnxEA38/edit?usp=sharing
